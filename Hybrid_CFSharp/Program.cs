@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using FTools;
+using Deedle;
 
 namespace Hybrid_CFSharp
 {
@@ -12,25 +13,53 @@ namespace Hybrid_CFSharp
     {
         static void Main(string[] args)
         {
-            // The code provided will print ‘Hello World’ to the console.
-            // Press Ctrl+F5 (or go to Debug > Start Without Debugging) to run your app.
+            SeriesImpl(args);
+
+            
+
+            // Go to http://aka.ms/dotnet-get-started-console to continue learning how to build a console app! 
+        }
+
+        static void SeriesImpl(string[] args)
+        {
             string path = args[0];
-            int colNum = Convert.ToInt32(args[1]);
+            int dateColNum = Convert.ToInt32(args[1]);
+            int valsColNum = Convert.ToInt32(args[2]);
             if (File.Exists(path))
             {
-                
-                List<double> series = File.ReadAllLines(path)
-                    .Skip(1)
-                    .Select(a => Convert.ToDouble(a.Split(',')[colNum]))
-                    .ToList();
-                Console.WriteLine(ExampleFunctions.Average(series.ToArray()));
+                Series<DateTime, Double> series;
+                string[] lines = File.ReadAllLines(path);
+                DateTime[] dates = lines.Skip(1)
+                    .Select(a => DateTime.Parse(a.Split(',')[dateColNum]))
+                    .ToArray();
+                double[] values = lines.Skip(1)
+                    .Select(a => Double.Parse(a.Split(',')[valsColNum]))
+                    .ToArray();
+                series = new Series<DateTime, double>(dates, values);
+                Console.WriteLine(ExampleFunctions.AverageOfSeries(series));
+
             }
             else
                 Console.WriteLine("path not found");
             Console.ReadLine();
-            
+        }
 
-            // Go to http://aka.ms/dotnet-get-started-console to continue learning how to build a console app! 
+        static void ArrayImpl(string[] args)
+        {
+            string path = args[0];
+            int colNum = Convert.ToInt32(args[1]);
+            if (File.Exists(path))
+            {
+
+                List<double> series = File.ReadAllLines(path)
+                    .Skip(1)
+                    .Select(a => Convert.ToDouble(a.Split(',')[colNum]))
+                    .ToList();
+                Console.WriteLine(ExampleFunctions.AverageOfArray(series.ToArray()));
+            }
+            else
+                Console.WriteLine("path not found");
+            Console.ReadLine();
         }
     }
 }
