@@ -51,11 +51,11 @@ namespace Hybrid_CFSharp
             if (File.Exists(path))
             {
 
-                List<double> series = File.ReadAllLines(path)
+                double[] series = File.ReadAllLines(path)
                     .Skip(1)
                     .Select(a => Convert.ToDouble(a.Split(',')[colNum]))
-                    .ToList();
-                Console.WriteLine(ExampleFunctions.AverageOfArray(series.ToArray()));
+                    .ToArray();
+                Console.WriteLine(ExampleFunctions.AverageOfArray(series));
             }
             else
                 Console.WriteLine("path not found");
